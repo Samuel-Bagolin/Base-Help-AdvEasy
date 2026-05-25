@@ -95,6 +95,11 @@ body{
   font-size:16px;
   font-weight:600;
   cursor:pointer;
+  transition:.2s;
+}
+
+.primary-btn:hover{
+  opacity:.95;
 }
 
 .pages-list{
@@ -123,7 +128,10 @@ body{
   max-width:52px;
   max-height:52px;
   object-fit:contain;
-  background:#111827;
+
+  background:#ffffff;
+  border:2px solid #c8a24d;
+
   border-radius:12px;
   padding:10px;
 }
@@ -135,10 +143,21 @@ body{
   margin-top:15px;
 }
 
+.question-item h3{
+  font-size:18px;
+}
+
+.question-item p{
+  margin-top:10px;
+  color:#475569;
+  line-height:28px;
+}
+
 .action-buttons{
   display:flex;
   gap:10px;
   margin-top:15px;
+  flex-wrap:wrap;
 }
 
 .edit-btn,
@@ -502,7 +521,7 @@ function renderPages(){
 
           <h3>${question.title}</h3>
 
-          <p style="margin-top:10px;">
+          <p>
             ${question.answer}
           </p>
 
@@ -540,6 +559,7 @@ function renderPages(){
             justify-content:space-between;
             align-items:flex-start;
             gap:20px;
+            flex-wrap:wrap;
           "
         >
 

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -48,11 +49,6 @@ body{
   border-radius:12px;
   font-weight:600;
   cursor:pointer;
-  transition:.2s;
-}
-
-.save-btn:hover{
-  opacity:.9;
 }
 
 .grid{
@@ -91,12 +87,10 @@ body{
   border-radius:12px;
   padding:14px;
   font-size:15px;
-  outline:none;
 }
 
 .form-group textarea{
   min-height:120px;
-  resize:vertical;
 }
 
 .primary-btn{
@@ -111,10 +105,6 @@ body{
   cursor:pointer;
 }
 
-.primary-btn:hover{
-  opacity:.95;
-}
-
 .pages-list{
   display:flex;
   flex-direction:column;
@@ -124,41 +114,20 @@ body{
 .page-item{
   border:1px solid #ececec;
   border-radius:16px;
+  padding:20px;
+}
+
+.question-item{
+  border:1px solid #ececec;
+  border-radius:14px;
   padding:18px;
-
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-}
-
-.page-left{
-  display:flex;
-  align-items:center;
-  gap:15px;
-}
-
-.page-left img{
-  width:52px;
-  height:52px;
-  object-fit:contain;
-  background:#111827;
-  border-radius:12px;
-  padding:10px;
-}
-
-.page-name{
-  font-size:18px;
-  font-weight:600;
-}
-
-.page-desc{
-  color:#64748b;
-  margin-top:4px;
+  margin-top:15px;
 }
 
 .action-buttons{
   display:flex;
   gap:10px;
+  margin-top:15px;
 }
 
 .edit-btn,
@@ -180,48 +149,8 @@ body{
   color:#fff;
 }
 
-.questions-area{
-  margin-top:40px;
-}
-
-.question-item{
-  border:1px solid #ececec;
-  border-radius:16px;
-  padding:24px;
-  margin-bottom:20px;
-}
-
-.question-title{
-  font-size:20px;
-  font-weight:600;
-  margin-bottom:15px;
-}
-
-.question-answer{
-  color:#475569;
-  line-height:28px;
-  margin-bottom:20px;
-}
-
-.empty{
-  text-align:center;
-  padding:80px 20px;
-  color:#94a3b8;
-}
-
-@media(max-width:980px){
-
-  .grid{
-    grid-template-columns:1fr;
-  }
-
-  .container{
-    padding:20px;
-  }
-
-}
-
 </style>
+
 </head>
 <body>
 
@@ -233,10 +162,6 @@ body{
       src="https://adveasy.com.br/wp-content/uploads/2023/01/result-3.svg"
       class="logo"
     >
-
-    <button class="save-btn" onclick="saveData()">
-      Salvar Atualizações
-    </button>
 
   </div>
 
@@ -254,11 +179,7 @@ body{
 
         <label>Link do Ícone</label>
 
-        <input
-          type="text"
-          id="pageIcon"
-          placeholder="https://..."
-        >
+        <input type="text" id="pageIcon">
 
       </div>
 
@@ -266,11 +187,7 @@ body{
 
         <label>Nome da Página</label>
 
-        <input
-          type="text"
-          id="pageName"
-          placeholder="Ex: EasyConnect"
-        >
+        <input type="text" id="pageName">
 
       </div>
 
@@ -278,10 +195,7 @@ body{
 
         <label>Descrição</label>
 
-        <textarea
-          id="pageDesc"
-          placeholder="Texto abaixo do nome"
-        ></textarea>
+        <textarea id="pageDesc"></textarea>
 
       </div>
 
@@ -289,7 +203,7 @@ body{
         Criar Página
       </button>
 
-      <div class="questions-area">
+      <div style="margin-top:50px;">
 
         <h2 class="card-title">
           Nova Pergunta
@@ -297,7 +211,7 @@ body{
 
         <div class="form-group">
 
-          <label>Selecione a Página</label>
+          <label>Página</label>
 
           <select id="questionPage"></select>
 
@@ -307,11 +221,7 @@ body{
 
           <label>Pergunta</label>
 
-          <input
-            type="text"
-            id="questionTitle"
-            placeholder="Digite a pergunta"
-          >
+          <input type="text" id="questionTitle">
 
         </div>
 
@@ -319,10 +229,7 @@ body{
 
           <label>Resposta</label>
 
-          <textarea
-            id="questionAnswer"
-            placeholder="Digite a resposta"
-          ></textarea>
+          <textarea id="questionAnswer"></textarea>
 
         </div>
 
@@ -350,45 +257,64 @@ body{
 
 </div>
 
-<script>
+<script type="module">
 
-let pages = JSON.parse(localStorage.getItem("adveasy_help_pages")) || [];
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
-function saveData(){
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  onSnapshot,
+  deleteDoc,
+  doc,
+  updateDoc
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-  localStorage.setItem(
-    "adveasy_help_pages",
-    JSON.stringify(pages)
-  );
+const firebaseConfig = {
+  apiKey: "AIzaSyCzyUBojyFVXk51F0dHljwu-mXrXO5xTHQ",
+  authDomain: "help-adveasy.firebaseapp.com",
+  projectId: "help-adveasy",
+  storageBucket: "help-adveasy.firebasestorage.app",
+  messagingSenderId: "276084634810",
+  appId: "1:276084634810:web:b8733e51aeca8db3653e83",
+  measurementId: "G-H7Q09XFCP9"
+};
 
-  alert("Atualizado em tempo real!");
+const app = initializeApp(firebaseConfig);
 
-}
+const db = getFirestore(app);
 
-function createPage(){
+let pages = [];
 
-  const icon = document.getElementById("pageIcon").value;
-  const name = document.getElementById("pageName").value;
-  const desc = document.getElementById("pageDesc").value;
+const pagesContainer =
+  document.getElementById("pagesContainer");
+
+const select =
+  document.getElementById("questionPage");
+
+window.createPage = async function(){
+
+  const icon =
+    document.getElementById("pageIcon").value;
+
+  const name =
+    document.getElementById("pageName").value;
+
+  const desc =
+    document.getElementById("pageDesc").value;
 
   if(!icon || !name || !desc){
     alert("Preencha todos os campos.");
     return;
   }
 
-  const newPage = {
-    id: Date.now(),
+  await addDoc(collection(db,"pages"),{
     icon,
     name,
     desc,
     questions:[]
-  };
-
-  pages.push(newPage);
-
-  renderPages();
-  updateSelect();
-  saveData();
+  });
 
   document.getElementById("pageIcon").value = "";
   document.getElementById("pageName").value = "";
@@ -396,11 +322,9 @@ function createPage(){
 
 }
 
-function createQuestion(){
+window.createQuestion = async function(){
 
-  const pageId = Number(
-    document.getElementById("questionPage").value
-  );
+  const pageId = select.value;
 
   const title =
     document.getElementById("questionTitle").value;
@@ -408,106 +332,88 @@ function createQuestion(){
   const answer =
     document.getElementById("questionAnswer").value;
 
-  if(!pageId || !title || !answer){
-    alert("Preencha todos os campos.");
-    return;
-  }
-
-  const page = pages.find(p => p.id === pageId);
+  const page =
+    pages.find(p => p.id === pageId);
 
   page.questions.push({
-    id: Date.now(),
+    id:Date.now(),
     title,
     answer
   });
 
-  renderPages();
-  saveData();
+  await updateDoc(doc(db,"pages",pageId),{
+    questions:page.questions
+  });
 
   document.getElementById("questionTitle").value = "";
   document.getElementById("questionAnswer").value = "";
 
 }
 
-function deletePage(id){
+window.deletePage = async function(id){
 
-  if(confirm("Deseja excluir essa página?")){
-
-    pages = pages.filter(p => p.id !== id);
-
-    renderPages();
-    updateSelect();
-    saveData();
-
-  }
+  await deleteDoc(doc(db,"pages",id));
 
 }
 
-function deleteQuestion(pageId, questionId){
+window.deleteQuestion = async function(pageId, questionId){
 
-  const page = pages.find(p => p.id === pageId);
+  const page =
+    pages.find(p => p.id === pageId);
 
-  page.questions = page.questions.filter(
-    q => q.id !== questionId
-  );
+  page.questions =
+    page.questions.filter(
+      q => q.id !== questionId
+    );
 
-  renderPages();
-  saveData();
-
-}
-
-function editPage(id){
-
-  const page = pages.find(p => p.id === id);
-
-  const newName = prompt("Novo nome:", page.name);
-
-  if(newName){
-    page.name = newName;
-  }
-
-  renderPages();
-  updateSelect();
-  saveData();
+  await updateDoc(doc(db,"pages",pageId),{
+    questions:page.questions
+  });
 
 }
 
-function editQuestion(pageId, questionId){
+window.editPage = async function(id){
 
-  const page = pages.find(p => p.id === pageId);
+  const page =
+    pages.find(p => p.id === id);
 
-  const question = page.questions.find(
-    q => q.id === questionId
-  );
+  const newName =
+    prompt("Novo nome", page.name);
 
-  const newQuestion = prompt(
-    "Editar pergunta:",
-    question.title
-  );
+  if(!newName) return;
 
-  const newAnswer = prompt(
-    "Editar resposta:",
-    question.answer
-  );
-
-  if(newQuestion){
-    question.title = newQuestion;
-  }
-
-  if(newAnswer){
-    question.answer = newAnswer;
-  }
-
-  renderPages();
-  saveData();
+  await updateDoc(doc(db,"pages",id),{
+    name:newName
+  });
 
 }
 
-function updateSelect(){
+window.editQuestion = async function(pageId, questionId){
 
-  const select =
-    document.getElementById("questionPage");
+  const page =
+    pages.find(p => p.id === pageId);
 
+  const question =
+    page.questions.find(q => q.id === questionId);
+
+  const title =
+    prompt("Pergunta",question.title);
+
+  const answer =
+    prompt("Resposta",question.answer);
+
+  question.title = title;
+  question.answer = answer;
+
+  await updateDoc(doc(db,"pages",pageId),{
+    questions:page.questions
+  });
+
+}
+
+function renderPages(){
+
+  pagesContainer.innerHTML = "";
   select.innerHTML = "";
 
   pages.forEach(page => {
@@ -518,59 +424,32 @@ function updateSelect(){
       </option>
     `;
 
-  });
-
-}
-
-function renderPages(){
-
-  const container =
-    document.getElementById("pagesContainer");
-
-  if(pages.length === 0){
-
-    container.innerHTML = `
-      <div class="empty">
-        Nenhuma página criada.
-      </div>
-    `;
-
-    return;
-
-  }
-
-  container.innerHTML = "";
-
-  pages.forEach(page => {
-
     let questionsHTML = "";
 
     page.questions.forEach(question => {
 
       questionsHTML += `
-      
+
         <div class="question-item">
 
-          <div class="question-title">
-            ${question.title}
-          </div>
+          <h3>${question.title}</h3>
 
-          <div class="question-answer">
+          <p style="margin-top:10px;">
             ${question.answer}
-          </div>
+          </p>
 
           <div class="action-buttons">
 
             <button
               class="edit-btn"
-              onclick="editQuestion(${page.id}, ${question.id})"
+              onclick="editQuestion('${page.id}', ${question.id})"
             >
               Editar
             </button>
 
             <button
               class="delete-btn"
-              onclick="deleteQuestion(${page.id}, ${question.id})"
+              onclick="deleteQuestion('${page.id}', ${question.id})"
             >
               Excluir
             </button>
@@ -583,66 +462,43 @@ function renderPages(){
 
     });
 
-    container.innerHTML += `
+    pagesContainer.innerHTML += `
 
       <div class="page-item">
 
-        <div style="width:100%;">
+        <div style="display:flex;justify-content:space-between;">
 
-          <div
-            style="
-              display:flex;
-              justify-content:space-between;
-              align-items:flex-start;
-              margin-bottom:25px;
-            "
-          >
+          <div>
 
-            <div class="page-left">
+            <h2>${page.name}</h2>
 
-              <img src="${page.icon}">
-
-              <div>
-
-                <div class="page-name">
-                  ${page.name}
-                </div>
-
-                <div class="page-desc">
-                  ${page.desc}
-                </div>
-
-              </div>
-
-            </div>
-
-            <div class="action-buttons">
-
-              <button
-                class="edit-btn"
-                onclick="editPage(${page.id})"
-              >
-                Editar
-              </button>
-
-              <button
-                class="delete-btn"
-                onclick="deletePage(${page.id})"
-              >
-                Excluir
-              </button>
-
-            </div>
+            <p style="margin-top:10px;color:#64748b;">
+              ${page.desc}
+            </p>
 
           </div>
 
-          ${questionsHTML || `
-            <div class="empty">
-              Nenhuma pergunta cadastrada.
-            </div>
-          `}
+          <div class="action-buttons">
+
+            <button
+              class="edit-btn"
+              onclick="editPage('${page.id}')"
+            >
+              Editar
+            </button>
+
+            <button
+              class="delete-btn"
+              onclick="deletePage('${page.id}')"
+            >
+              Excluir
+            </button>
+
+          </div>
 
         </div>
+
+        ${questionsHTML}
 
       </div>
 
@@ -652,8 +508,22 @@ function renderPages(){
 
 }
 
-renderPages();
-updateSelect();
+onSnapshot(collection(db,"pages"), snapshot => {
+
+  pages = [];
+
+  snapshot.forEach(docItem => {
+
+    pages.push({
+      id:docItem.id,
+      ...docItem.data()
+    });
+
+  });
+
+  renderPages();
+
+});
 
 </script>
 

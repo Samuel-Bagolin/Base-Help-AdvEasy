@@ -1,773 +1,661 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>Central de Ajuda - AdvEasy</title>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-  <style>
-
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
-      scroll-behavior:smooth;
-    }
-
-    body{
-      font-family:'Inter',sans-serif;
-      background:#ffffff;
-      color:#0f172a;
-    }
-
-    a{
-      text-decoration:none;
-      color:inherit;
-    }
-
-    /* HEADER */
-
-    .header{
-      width:100%;
-      height:85px;
-      border-bottom:1px solid #ececec;
-      background:#fff;
-      position:sticky;
-      top:0;
-      z-index:999;
-    }
-
-    .header-content{
-      max-width:1400px;
-      height:100%;
-      margin:auto;
-      padding:0 40px;
-
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-    }
-
-    .logo{
-      height:44px;
-      cursor:pointer;
-    }
-
-    .login-btn{
-      border:1px solid #c8a24d;
-      color:#8f6a1c;
-      padding:12px 24px;
-      border-radius:12px;
-      font-weight:600;
-      transition:.2s;
-    }
-
-    .login-btn:hover{
-      background:#c8a24d;
-      color:#fff;
-    }
-
-    /* HERO */
-
-    .hero{
-      padding:50px 30px 20px;
-    }
-
-    .hero-content{
-      max-width:1400px;
-      margin:auto;
-    }
-
-    .search-box{
-      width:100%;
-      max-width:1100px;
-      border-bottom:2px solid #1e293b;
-
-      display:flex;
-      align-items:center;
-      gap:16px;
-
-      padding-bottom:18px;
-    }
-
-    .search-box span{
-      font-size:24px;
-      color:#64748b;
-    }
-
-    .search-box input{
-      width:100%;
-      border:none;
-      outline:none;
-      font-size:22px;
-      background:transparent;
-      color:#0f172a;
-    }
-
-    .search-box input::placeholder{
-      color:#64748b;
-    }
-
-    /* HOME */
-
-    #homePage{
-      display:block;
-    }
-
-    .categories{
-      max-width:1400px;
-      margin:60px auto;
-      padding:0 30px;
-
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
-      gap:30px;
-    }
-
-    .category-card{
-      border:1px solid #ececec;
-      border-radius:18px;
-      padding:30px;
-      cursor:pointer;
-      transition:.2s;
-      background:#fff;
-    }
-
-    .category-card:hover{
-      transform:translateY(-4px);
-      border-color:#c8a24d;
-      box-shadow:0 12px 30px rgba(0,0,0,.06);
-    }
-
-    .card-top{
-      display:flex;
-      align-items:flex-start;
-      gap:18px;
-    }
-
-    .card-icon{
-      width:70px;
-      height:70px;
-      border-radius:18px;
-      background:#111827;
-
-      display:flex;
-      align-items:center;
-      justify-content:center;
-
-      color:#fff;
-      font-size:30px;
-      flex-shrink:0;
-    }
-
-    .card-icon img{
-      width:34px;
-      height:34px;
-      object-fit:contain;
-    }
-
-    .card-text h2{
-      font-size:30px;
-      margin-bottom:10px;
-    }
-
-    .card-text p{
-      color:#64748b;
-      line-height:28px;
-      font-size:17px;
-    }
-
-    /* FAQ PAGE */
-
-    .faq-page{
-      display:none;
-      max-width:1200px;
-      margin:50px auto 100px;
-      padding:0 30px;
-    }
-
-    .breadcrumb{
-      color:#64748b;
-      margin-bottom:30px;
-      font-size:15px;
-    }
-
-    .faq-header{
-      display:flex;
-      align-items:center;
-      gap:20px;
-      margin-bottom:40px;
-    }
-
-    .faq-header-icon{
-      width:90px;
-      height:90px;
-      border-radius:22px;
-      background:#111827;
-
-      display:flex;
-      align-items:center;
-      justify-content:center;
-    }
-
-    .faq-header-icon img{
-      width:42px;
-      height:42px;
-      object-fit:contain;
-    }
-
-    .faq-header h1{
-      font-size:48px;
-      margin-bottom:10px;
-    }
-
-    .faq-header p{
-      font-size:20px;
-      color:#64748b;
-    }
-
-    .faq-box{
-      border:1px solid #e7e7e7;
-      border-radius:20px;
-      overflow:hidden;
-    }
-
-    .faq-item{
-      border-bottom:1px solid #ececec;
-    }
-
-    .faq-item:last-child{
-      border-bottom:none;
-    }
-
-    .faq-question{
-      width:100%;
-      background:#fff;
-      border:none;
-
-      padding:28px 34px;
-
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-
-      cursor:pointer;
-      transition:.2s;
-    }
-
-    .faq-question:hover{
-      background:#fafafa;
-    }
-
-    .faq-question h3{
-      font-size:22px;
-      font-weight:500;
-      text-align:left;
-    }
-
-    .faq-arrow{
-      font-size:28px;
-      color:#c8a24d;
-      transition:.3s;
-    }
-
-    .faq-answer{
-      max-height:0;
-      overflow:hidden;
-      transition:max-height .3s ease;
-    }
-
-    .faq-answer-content{
-      padding:0 34px 30px;
-      color:#475569;
-      line-height:32px;
-      font-size:17px;
-    }
-
-    .faq-item.active .faq-answer{
-      max-height:500px;
-    }
-
-    .faq-item.active .faq-arrow{
-      transform:rotate(90deg);
-    }
-
-    .back-btn{
-      margin-bottom:35px;
-
-      display:inline-flex;
-      align-items:center;
-      gap:10px;
-
-      color:#8f6a1c;
-      font-weight:600;
-      cursor:pointer;
-    }
-
-    /* FOOTER */
-
-    .footer{
-      border-top:1px solid #ececec;
-      padding:40px 20px;
-      text-align:center;
-    }
-
-    .footer img{
-      height:40px;
-      margin-bottom:15px;
-      cursor:pointer;
-    }
-
-    .footer p{
-      color:#64748b;
-    }
-
-    /* RESPONSIVO */
-
-    @media(max-width:768px){
-
-      .header-content{
-        padding:0 20px;
-      }
-
-      .categories{
-        grid-template-columns:1fr;
-      }
-
-      .faq-header{
-        flex-direction:column;
-        align-items:flex-start;
-      }
-
-      .faq-header h1{
-        font-size:34px;
-      }
-
-      .faq-question{
-        padding:22px;
-      }
-
-      .faq-answer-content{
-        padding:0 22px 24px;
-      }
-
-      .faq-question h3{
-        font-size:18px;
-      }
-
-    }
-
-  </style>
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Painel Admin - AdvEasy Help</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family:'Inter',sans-serif;
+  background:#f8fafc;
+  color:#0f172a;
+}
+
+.container{
+  max-width:1400px;
+  margin:auto;
+  padding:40px;
+}
+
+.header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:40px;
+}
+
+.logo{
+  height:42px;
+}
+
+.save-btn{
+  background:#c8a24d;
+  color:#fff;
+  border:none;
+  padding:14px 24px;
+  border-radius:12px;
+  font-weight:600;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.save-btn:hover{
+  opacity:.9;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:380px 1fr;
+  gap:30px;
+}
+
+.card{
+  background:#fff;
+  border-radius:20px;
+  padding:30px;
+  border:1px solid #ececec;
+}
+
+.card-title{
+  font-size:24px;
+  margin-bottom:25px;
+}
+
+.form-group{
+  margin-bottom:20px;
+}
+
+.form-group label{
+  display:block;
+  margin-bottom:10px;
+  font-weight:600;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select{
+  width:100%;
+  border:1px solid #dbe2ea;
+  border-radius:12px;
+  padding:14px;
+  font-size:15px;
+  outline:none;
+}
+
+.form-group textarea{
+  min-height:120px;
+  resize:vertical;
+}
+
+.primary-btn{
+  width:100%;
+  background:#111827;
+  color:#fff;
+  border:none;
+  border-radius:12px;
+  padding:16px;
+  font-size:16px;
+  font-weight:600;
+  cursor:pointer;
+}
+
+.primary-btn:hover{
+  opacity:.95;
+}
+
+.pages-list{
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+}
+
+.page-item{
+  border:1px solid #ececec;
+  border-radius:16px;
+  padding:18px;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.page-left{
+  display:flex;
+  align-items:center;
+  gap:15px;
+}
+
+.page-left img{
+  width:52px;
+  height:52px;
+  object-fit:contain;
+  background:#111827;
+  border-radius:12px;
+  padding:10px;
+}
+
+.page-name{
+  font-size:18px;
+  font-weight:600;
+}
+
+.page-desc{
+  color:#64748b;
+  margin-top:4px;
+}
+
+.action-buttons{
+  display:flex;
+  gap:10px;
+}
+
+.edit-btn,
+.delete-btn{
+  border:none;
+  padding:10px 14px;
+  border-radius:10px;
+  cursor:pointer;
+  font-weight:600;
+}
+
+.edit-btn{
+  background:#c8a24d;
+  color:#fff;
+}
+
+.delete-btn{
+  background:#ef4444;
+  color:#fff;
+}
+
+.questions-area{
+  margin-top:40px;
+}
+
+.question-item{
+  border:1px solid #ececec;
+  border-radius:16px;
+  padding:24px;
+  margin-bottom:20px;
+}
+
+.question-title{
+  font-size:20px;
+  font-weight:600;
+  margin-bottom:15px;
+}
+
+.question-answer{
+  color:#475569;
+  line-height:28px;
+  margin-bottom:20px;
+}
+
+.empty{
+  text-align:center;
+  padding:80px 20px;
+  color:#94a3b8;
+}
+
+@media(max-width:980px){
+
+  .grid{
+    grid-template-columns:1fr;
+  }
+
+  .container{
+    padding:20px;
+  }
+
+}
+
+</style>
 </head>
-
 <body>
 
-  <!-- HEADER -->
+<div class="container">
 
-  <header class="header">
+  <div class="header">
 
-    <div class="header-content">
+    <img
+      src="https://adveasy.com.br/wp-content/uploads/2023/01/result-3.svg"
+      class="logo"
+    >
 
-      <img
-        src="https://adveasy.com.br/wp-content/uploads/2023/01/result-3.svg"
-        class="logo"
-        alt="AdvEasy"
-        onclick="goHome()"
-      >
+    <button class="save-btn" onclick="saveData()">
+      Salvar Atualizações
+    </button>
 
-      <a
-        href="https://web.homol.advogado.adveasy.com.br/"
-        target="_blank"
-        class="login-btn"
-      >
-        Login
-      </a>
+  </div>
 
-    </div>
+  <div class="grid">
 
-  </header>
+    <!-- LEFT -->
 
-  <!-- HERO -->
+    <div class="card">
 
-  <section class="hero">
+      <h2 class="card-title">
+        Nova Página
+      </h2>
 
-    <div class="hero-content">
+      <div class="form-group">
 
-      <div class="search-box">
-
-        <span>⌕</span>
+        <label>Link do Ícone</label>
 
         <input
           type="text"
-          id="searchInput"
-          placeholder="Pesquisar artigos..."
+          id="pageIcon"
+          placeholder="https://..."
         >
+
+      </div>
+
+      <div class="form-group">
+
+        <label>Nome da Página</label>
+
+        <input
+          type="text"
+          id="pageName"
+          placeholder="Ex: EasyConnect"
+        >
+
+      </div>
+
+      <div class="form-group">
+
+        <label>Descrição</label>
+
+        <textarea
+          id="pageDesc"
+          placeholder="Texto abaixo do nome"
+        ></textarea>
+
+      </div>
+
+      <button class="primary-btn" onclick="createPage()">
+        Criar Página
+      </button>
+
+      <div class="questions-area">
+
+        <h2 class="card-title">
+          Nova Pergunta
+        </h2>
+
+        <div class="form-group">
+
+          <label>Selecione a Página</label>
+
+          <select id="questionPage"></select>
+
+        </div>
+
+        <div class="form-group">
+
+          <label>Pergunta</label>
+
+          <input
+            type="text"
+            id="questionTitle"
+            placeholder="Digite a pergunta"
+          >
+
+        </div>
+
+        <div class="form-group">
+
+          <label>Resposta</label>
+
+          <textarea
+            id="questionAnswer"
+            placeholder="Digite a resposta"
+          ></textarea>
+
+        </div>
+
+        <button class="primary-btn" onclick="createQuestion()">
+          Adicionar Pergunta
+        </button>
 
       </div>
 
     </div>
 
-  </section>
+    <!-- RIGHT -->
 
-  <!-- HOME -->
+    <div class="card">
 
-  <section id="homePage">
+      <h2 class="card-title">
+        Páginas Criadas
+      </h2>
 
-    <div class="categories"></div>
+      <div id="pagesContainer" class="pages-list"></div>
 
-  </section>
+    </div>
 
-  <!-- FOOTER -->
+  </div>
 
-  <footer class="footer">
+</div>
 
-    <img
-      src="https://adveasy.com.br/wp-content/uploads/2023/01/result-3.svg"
-      alt="AdvEasy"
-      onclick="goHome()"
-    >
+<script>
 
-    <p>
-      © 2026 AdvEasy. Todos os direitos reservados.
-    </p>
+let pages = JSON.parse(localStorage.getItem("adveasy_help_pages")) || [];
 
-  </footer>
+function saveData(){
 
-  <!-- SCRIPT -->
+  localStorage.setItem(
+    "adveasy_help_pages",
+    JSON.stringify(pages)
+  );
 
-  <script>
+  alert("Atualizado em tempo real!");
 
-    // =========================
-    // DADOS DINÂMICOS
-    // =========================
+}
 
-    let pages = JSON.parse(
-      localStorage.getItem("adveasy_help_pages")
-    ) || [];
+function createPage(){
 
-    // =========================
-    // RENDER HOME
-    // =========================
+  const icon = document.getElementById("pageIcon").value;
+  const name = document.getElementById("pageName").value;
+  const desc = document.getElementById("pageDesc").value;
 
-    function renderHomePages(){
+  if(!icon || !name || !desc){
+    alert("Preencha todos os campos.");
+    return;
+  }
 
-      const categories =
-        document.querySelector(".categories");
+  const newPage = {
+    id: Date.now(),
+    icon,
+    name,
+    desc,
+    questions:[]
+  };
 
-      categories.innerHTML = "";
+  pages.push(newPage);
 
-      if(pages.length === 0){
+  renderPages();
+  updateSelect();
+  saveData();
 
-        categories.innerHTML = `
+  document.getElementById("pageIcon").value = "";
+  document.getElementById("pageName").value = "";
+  document.getElementById("pageDesc").value = "";
+
+}
+
+function createQuestion(){
+
+  const pageId = Number(
+    document.getElementById("questionPage").value
+  );
+
+  const title =
+    document.getElementById("questionTitle").value;
+
+  const answer =
+    document.getElementById("questionAnswer").value;
+
+  if(!pageId || !title || !answer){
+    alert("Preencha todos os campos.");
+    return;
+  }
+
+  const page = pages.find(p => p.id === pageId);
+
+  page.questions.push({
+    id: Date.now(),
+    title,
+    answer
+  });
+
+  renderPages();
+  saveData();
+
+  document.getElementById("questionTitle").value = "";
+  document.getElementById("questionAnswer").value = "";
+
+}
+
+function deletePage(id){
+
+  if(confirm("Deseja excluir essa página?")){
+
+    pages = pages.filter(p => p.id !== id);
+
+    renderPages();
+    updateSelect();
+    saveData();
+
+  }
+
+}
+
+function deleteQuestion(pageId, questionId){
+
+  const page = pages.find(p => p.id === pageId);
+
+  page.questions = page.questions.filter(
+    q => q.id !== questionId
+  );
+
+  renderPages();
+  saveData();
+
+}
+
+function editPage(id){
+
+  const page = pages.find(p => p.id === id);
+
+  const newName = prompt("Novo nome:", page.name);
+
+  if(newName){
+    page.name = newName;
+  }
+
+  renderPages();
+  updateSelect();
+  saveData();
+
+}
+
+function editQuestion(pageId, questionId){
+
+  const page = pages.find(p => p.id === pageId);
+
+  const question = page.questions.find(
+    q => q.id === questionId
+  );
+
+  const newQuestion = prompt(
+    "Editar pergunta:",
+    question.title
+  );
+
+  const newAnswer = prompt(
+    "Editar resposta:",
+    question.answer
+  );
+
+  if(newQuestion){
+    question.title = newQuestion;
+  }
+
+  if(newAnswer){
+    question.answer = newAnswer;
+  }
+
+  renderPages();
+  saveData();
+
+}
+
+function updateSelect(){
+
+  const select =
+    document.getElementById("questionPage");
+
+  select.innerHTML = "";
+
+  pages.forEach(page => {
+
+    select.innerHTML += `
+      <option value="${page.id}">
+        ${page.name}
+      </option>
+    `;
+
+  });
+
+}
+
+function renderPages(){
+
+  const container =
+    document.getElementById("pagesContainer");
+
+  if(pages.length === 0){
+
+    container.innerHTML = `
+      <div class="empty">
+        Nenhuma página criada.
+      </div>
+    `;
+
+    return;
+
+  }
+
+  container.innerHTML = "";
+
+  pages.forEach(page => {
+
+    let questionsHTML = "";
+
+    page.questions.forEach(question => {
+
+      questionsHTML += `
+      
+        <div class="question-item">
+
+          <div class="question-title">
+            ${question.title}
+          </div>
+
+          <div class="question-answer">
+            ${question.answer}
+          </div>
+
+          <div class="action-buttons">
+
+            <button
+              class="edit-btn"
+              onclick="editQuestion(${page.id}, ${question.id})"
+            >
+              Editar
+            </button>
+
+            <button
+              class="delete-btn"
+              onclick="deleteQuestion(${page.id}, ${question.id})"
+            >
+              Excluir
+            </button>
+
+          </div>
+
+        </div>
+
+      `;
+
+    });
+
+    container.innerHTML += `
+
+      <div class="page-item">
+
+        <div style="width:100%;">
 
           <div
             style="
-              width:100%;
-              padding:80px 20px;
-              text-align:center;
-              color:#64748b;
-              grid-column:1/-1;
+              display:flex;
+              justify-content:space-between;
+              align-items:flex-start;
+              margin-bottom:25px;
             "
           >
 
-            Nenhuma página cadastrada.
+            <div class="page-left">
 
-          </div>
-
-        `;
-
-        return;
-
-      }
-
-      pages.forEach(page => {
-
-        categories.innerHTML += `
-
-          <div
-            class="category-card"
-            onclick="openPage('${page.id}')"
-          >
-
-            <div class="card-top">
-
-              <div class="card-icon">
-
-                <img src="${page.icon}">
-
-              </div>
-
-              <div class="card-text">
-
-                <h2>${page.name}</h2>
-
-                <p>${page.desc}</p>
-
-              </div>
-
-            </div>
-
-          </div>
-
-        `;
-
-      });
-
-    }
-
-    // =========================
-    // RENDER FAQ
-    // =========================
-
-    function renderFaqPages(){
-
-      document.querySelectorAll(".faq-page").forEach(el => {
-        el.remove();
-      });
-
-      pages.forEach(page => {
-
-        let questionsHTML = "";
-
-        if(page.questions.length === 0){
-
-          questionsHTML = `
-
-            <div class="faq-item active">
-
-              <button class="faq-question">
-
-                <h3>Conteúdo em atualização</h3>
-
-                <span class="faq-arrow">›</span>
-
-              </button>
-
-              <div class="faq-answer">
-
-                <div class="faq-answer-content">
-
-                  Estamos preparando os artigos desta categoria.
-
-                </div>
-
-              </div>
-
-            </div>
-
-          `;
-
-        }else{
-
-          page.questions.forEach(question => {
-
-            questionsHTML += `
-
-              <div class="faq-item">
-
-                <button class="faq-question">
-
-                  <h3>${question.title}</h3>
-
-                  <span class="faq-arrow">›</span>
-
-                </button>
-
-                <div class="faq-answer">
-
-                  <div class="faq-answer-content">
-
-                    ${question.answer}
-
-                  </div>
-
-                </div>
-
-              </div>
-
-            `;
-
-          });
-
-        }
-
-        document.body.insertAdjacentHTML(
-          "beforeend",
-          `
-
-          <section class="faq-page" id="${page.id}">
-
-            <div class="back-btn" onclick="goHome()">
-              ← Voltar
-            </div>
-
-            <div class="breadcrumb">
-              Todas as coleções > ${page.name}
-            </div>
-
-            <div class="faq-header">
-
-              <div class="faq-header-icon">
-
-                <img src="${page.icon}">
-
-              </div>
+              <img src="${page.icon}">
 
               <div>
 
-                <h1>${page.name}</h1>
+                <div class="page-name">
+                  ${page.name}
+                </div>
 
-                <p>${page.desc}</p>
+                <div class="page-desc">
+                  ${page.desc}
+                </div>
 
               </div>
 
             </div>
 
-            <div class="faq-box">
+            <div class="action-buttons">
 
-              ${questionsHTML}
+              <button
+                class="edit-btn"
+                onclick="editPage(${page.id})"
+              >
+                Editar
+              </button>
+
+              <button
+                class="delete-btn"
+                onclick="deletePage(${page.id})"
+              >
+                Excluir
+              </button>
 
             </div>
 
-          </section>
+          </div>
 
-          `
-        );
+          ${questionsHTML || `
+            <div class="empty">
+              Nenhuma pergunta cadastrada.
+            </div>
+          `}
 
-      });
+        </div>
 
-      bindFaqEvents();
+      </div>
 
-    }
+    `;
 
-    // =========================
-    // FAQ EVENTS
-    // =========================
+  });
 
-    function bindFaqEvents(){
+}
 
-      document.querySelectorAll('.faq-question').forEach(question => {
+renderPages();
+updateSelect();
 
-        question.addEventListener('click', () => {
-
-          const item = question.parentElement;
-
-          item.classList.toggle('active');
-
-        });
-
-      });
-
-    }
-
-    // =========================
-    // OPEN PAGE
-    // =========================
-
-    function openPage(id){
-
-      document.getElementById('homePage').style.display = 'none';
-
-      document.querySelectorAll('.faq-page').forEach(page => {
-        page.style.display = 'none';
-      });
-
-      const target = document.getElementById(id);
-
-      if(target){
-        target.style.display = 'block';
-      }
-
-      window.scrollTo(0,0);
-
-    }
-
-    // =========================
-    // HOME
-    // =========================
-
-    function goHome(){
-
-      document.querySelectorAll('.faq-page').forEach(page => {
-        page.style.display = 'none';
-      });
-
-      document.getElementById('homePage').style.display = 'block';
-
-      document.getElementById('searchInput').value = '';
-
-      document.querySelectorAll('.category-card').forEach(card => {
-        card.style.display = 'block';
-      });
-
-      window.scrollTo(0,0);
-
-    }
-
-    // =========================
-    // SEARCH
-    // =========================
-
-    const searchInput =
-      document.getElementById('searchInput');
-
-    searchInput.addEventListener('keyup', function(){
-
-      const value =
-        this.value.toLowerCase();
-
-      const cards =
-        document.querySelectorAll('.category-card');
-
-      cards.forEach(card => {
-
-        const text =
-          card.innerText.toLowerCase();
-
-        if(text.includes(value)){
-
-          card.style.display = 'block';
-
-        }else{
-
-          card.style.display = 'none';
-
-        }
-
-      });
-
-    });
-
-    // =========================
-    // REALTIME UPDATE
-    // =========================
-
-    window.addEventListener("storage", () => {
-
-      pages = JSON.parse(
-        localStorage.getItem("adveasy_help_pages")
-      ) || [];
-
-      renderHomePages();
-      renderFaqPages();
-
-    });
-
-    // =========================
-    // INIT
-    // =========================
-
-    renderHomePages();
-    renderFaqPages();
-
-  </script>
+</script>
 
 </body>
 </html>

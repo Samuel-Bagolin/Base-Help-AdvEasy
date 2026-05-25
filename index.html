@@ -8,6 +8,7 @@
 <title>Painel Admin - AdvEasy Help</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
+
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
@@ -39,16 +40,6 @@ body{
 
 .logo{
   height:42px;
-}
-
-.save-btn{
-  background:#c8a24d;
-  color:#fff;
-  border:none;
-  padding:14px 24px;
-  border-radius:12px;
-  font-weight:600;
-  cursor:pointer;
 }
 
 .grid{
@@ -87,6 +78,7 @@ body{
   border-radius:12px;
   padding:14px;
   font-size:15px;
+  outline:none;
 }
 
 .form-group textarea{
@@ -108,7 +100,7 @@ body{
 .pages-list{
   display:flex;
   flex-direction:column;
-  gap:18px;
+  gap:20px;
 }
 
 .page-item{
@@ -149,9 +141,16 @@ body{
   color:#fff;
 }
 
+.empty{
+  padding:60px 20px;
+  text-align:center;
+  color:#94a3b8;
+}
+
 </style>
 
 </head>
+
 <body>
 
 <div class="container">
@@ -271,6 +270,8 @@ import {
   updateDoc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+// FIREBASE
+
 const firebaseConfig = {
   apiKey: "AIzaSyCzyUBojyFVXk51F0dHljwu-mXrXO5xTHQ",
   authDomain: "help-adveasy.firebaseapp.com",
@@ -285,13 +286,13 @@ const app = initializeApp(firebaseConfig);
 
 const db = getFirestore(app);
 
+// DADOS
+
 let pages = [];
 
-const pagesContainer =
-  document.getElementById("pagesContainer");
-
-const select =
-  document.getElementById("questionPage");
+// =========================
+// CREATE PAGE
+// =========================
 
 window.createPage = async function(){
 
@@ -322,15 +323,25 @@ window.createPage = async function(){
 
 }
 
+// =========================
+// CREATE QUESTION
+// =========================
+
 window.createQuestion = async function(){
 
-  const pageId = select.value;
+  const pageId =
+    document.getElementById("questionPage").value;
 
   const title =
     document.getElementById("questionTitle").value;
 
   const answer =
     document.getElementById("questionAnswer").value;
+
+  if(!pageId || !title || !answer){
+    alert("Preencha todos os campos.");
+    return;
+  }
 
   const page =
     pages.find(p => p.id === pageId);
@@ -350,11 +361,24 @@ window.createQuestion = async function(){
 
 }
 
+// =========================
+// DELETE PAGE
+// =========================
+
 window.deletePage = async function(id){
+
+  const confirmDelete =
+    confirm("Deseja excluir essa página?");
+
+  if(!confirmDelete) return;
 
   await deleteDoc(doc(db,"pages",id));
 
 }
+
+// =========================
+// DELETE QUESTION
+// =========================
 
 window.deleteQuestion = async function(pageId, questionId){
 
@@ -372,13 +396,17 @@ window.deleteQuestion = async function(pageId, questionId){
 
 }
 
+// =========================
+// EDIT PAGE
+// =========================
+
 window.editPage = async function(id){
 
   const page =
     pages.find(p => p.id === id);
 
   const newName =
-    prompt("Novo nome", page.name);
+    prompt("Novo nome:", page.name);
 
   if(!newName) return;
 
@@ -388,22 +416,30 @@ window.editPage = async function(id){
 
 }
 
+// =========================
+// EDIT QUESTION
+// =========================
+
 window.editQuestion = async function(pageId, questionId){
 
   const page =
     pages.find(p => p.id === pageId);
 
   const question =
-    page.questions.find(q => q.id === questionId);
+    page.questions.find(
+      q => q.id === questionId
+    );
 
-  const title =
-    prompt("Pergunta",question.title);
+  const newQuestion =
+    prompt("Editar pergunta:", question.title);
 
-  const answer =
-    prompt("Resposta",question.answer);
+  const newAnswer =
+    prompt("Editar resposta:", question.answer);
 
-  question.title = title;
-  question.answer = answer;
+  if(!newQuestion || !newAnswer) return;
+
+  question.title = newQuestion;
+  question.answer = newAnswer;
 
   await updateDoc(doc(db,"pages",pageId),{
     questions:page.questions
@@ -411,10 +447,32 @@ window.editQuestion = async function(pageId, questionId){
 
 }
 
+// =========================
+// RENDER
+// =========================
+
 function renderPages(){
 
-  pagesContainer.innerHTML = "";
+  const container =
+    document.getElementById("pagesContainer");
+
+  const select =
+    document.getElementById("questionPage");
+
+  container.innerHTML = "";
   select.innerHTML = "";
+
+  if(pages.length === 0){
+
+    container.innerHTML = `
+      <div class="empty">
+        Nenhuma página criada.
+      </div>
+    `;
+
+    return;
+
+  }
 
   pages.forEach(page => {
 
@@ -462,11 +520,18 @@ function renderPages(){
 
     });
 
-    pagesContainer.innerHTML += `
+    container.innerHTML += `
 
       <div class="page-item">
 
-        <div style="display:flex;justify-content:space-between;">
+        <div
+          style="
+            display:flex;
+            justify-content:space-between;
+            align-items:flex-start;
+            gap:20px;
+          "
+        >
 
           <div>
 
@@ -507,6 +572,10 @@ function renderPages(){
   });
 
 }
+
+// =========================
+// REALTIME
+// =========================
 
 onSnapshot(collection(db,"pages"), snapshot => {
 

@@ -109,6 +109,25 @@ body{
   padding:20px;
 }
 
+.page-left{
+  display:flex;
+  align-items:flex-start;
+  gap:15px;
+}
+
+.page-left img{
+  width:52px;
+  height:52px;
+  min-width:52px;
+  min-height:52px;
+  max-width:52px;
+  max-height:52px;
+  object-fit:contain;
+  background:#111827;
+  border-radius:12px;
+  padding:10px;
+}
+
 .question-item{
   border:1px solid #ececec;
   border-radius:14px;
@@ -145,6 +164,18 @@ body{
   padding:60px 20px;
   text-align:center;
   color:#94a3b8;
+}
+
+@media(max-width:980px){
+
+  .grid{
+    grid-template-columns:1fr;
+  }
+
+  .container{
+    padding:20px;
+  }
+
 }
 
 </style>
@@ -270,8 +301,6 @@ import {
   updateDoc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// FIREBASE
-
 const firebaseConfig = {
   apiKey: "AIzaSyCzyUBojyFVXk51F0dHljwu-mXrXO5xTHQ",
   authDomain: "help-adveasy.firebaseapp.com",
@@ -283,16 +312,9 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-
 const db = getFirestore(app);
 
-// DADOS
-
 let pages = [];
-
-// =========================
-// CREATE PAGE
-// =========================
 
 window.createPage = async function(){
 
@@ -322,10 +344,6 @@ window.createPage = async function(){
   document.getElementById("pageDesc").value = "";
 
 }
-
-// =========================
-// CREATE QUESTION
-// =========================
 
 window.createQuestion = async function(){
 
@@ -361,10 +379,6 @@ window.createQuestion = async function(){
 
 }
 
-// =========================
-// DELETE PAGE
-// =========================
-
 window.deletePage = async function(id){
 
   const confirmDelete =
@@ -375,10 +389,6 @@ window.deletePage = async function(id){
   await deleteDoc(doc(db,"pages",id));
 
 }
-
-// =========================
-// DELETE QUESTION
-// =========================
 
 window.deleteQuestion = async function(pageId, questionId){
 
@@ -396,29 +406,33 @@ window.deleteQuestion = async function(pageId, questionId){
 
 }
 
-// =========================
-// EDIT PAGE
-// =========================
-
 window.editPage = async function(id){
 
   const page =
     pages.find(p => p.id === id);
 
   const newName =
-    prompt("Novo nome:", page.name);
+    prompt("Novo nome da página:", page.name);
 
-  if(!newName) return;
+  if(newName === null) return;
+
+  const newDesc =
+    prompt("Nova descrição:", page.desc);
+
+  if(newDesc === null) return;
+
+  const newIcon =
+    prompt("Novo link do ícone:", page.icon);
+
+  if(newIcon === null) return;
 
   await updateDoc(doc(db,"pages",id),{
-    name:newName
+    name:newName,
+    desc:newDesc,
+    icon:newIcon
   });
 
 }
-
-// =========================
-// EDIT QUESTION
-// =========================
 
 window.editQuestion = async function(pageId, questionId){
 
@@ -446,10 +460,6 @@ window.editQuestion = async function(pageId, questionId){
   });
 
 }
-
-// =========================
-// RENDER
-// =========================
 
 function renderPages(){
 
@@ -533,13 +543,19 @@ function renderPages(){
           "
         >
 
-          <div>
+          <div class="page-left">
 
-            <h2>${page.name}</h2>
+            <img src="${page.icon}">
 
-            <p style="margin-top:10px;color:#64748b;">
-              ${page.desc}
-            </p>
+            <div>
+
+              <h2>${page.name}</h2>
+
+              <p style="margin-top:10px;color:#64748b;">
+                ${page.desc}
+              </p>
+
+            </div>
 
           </div>
 
@@ -572,10 +588,6 @@ function renderPages(){
   });
 
 }
-
-// =========================
-// REALTIME
-// =========================
 
 onSnapshot(collection(db,"pages"), snapshot => {
 
